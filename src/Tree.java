@@ -1,6 +1,3 @@
-
-
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -9,9 +6,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 public class Tree {
-	private ArrayList<String> list;
-	public Tree(ArrayList<String> KVList) {
-		list = KVList;
+	private String prev;
+	public Tree(String previous) {
+		prev = previous;
+		
 	}
 	public static String encrypt(String input) {
 		try {

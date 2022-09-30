@@ -1,35 +1,47 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Commit {
-	String p;
+	String p; 
 	String c;
-	String pointToTree;
 	String date;
 	String name;
 	String summary;
-	File pTree;
-	public Commit(String parent, String child, String pointTo, String author, String description) {
-		pointToTree = pointTo;
+	Tree tree;
+	public Commit(String parent, String child, String author, String description) {//Also need to get rid of parent?, not needed
 		p = parent;
 		c = child;
 		summary = description;
 		name = author;
-		if(!(pointToTree == null)) {
-			pTree = new File(pointToTree);
+		if(p != null) {
+			String s = "";
+			Path path = Paths.get("./objects/" + p);
+			try {
+				s = Files.readString(path);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}//gets the text of the original file 
+			s.substring(0);//FIX THIS
+			tree = new Tree (s);//use p to get the last tree to start the new tree
+		}
+		else{
+			tree = new Tree (null);
 		}
 	}
-	public String getPTree() {
-		return pTree.toString();
-	}
-	public boolean pTreeExists() {
-		return pTree.exists();
+	public Tree getTree() {
+		return tree;
 	}
 	public static String encrypt(String input) {
 		try {
@@ -57,7 +69,7 @@ public class Commit {
 	public void writeFile() throws FileNotFoundException {
 		File f = new File("objects", generateSHA1());
 		PrintWriter pw = new PrintWriter(f);
-		pw.println(pointToTree);
+		pw.println(tree.generateSHA1());
 		pw.println(p);
 		pw.println(c);
 		pw.println(name);
