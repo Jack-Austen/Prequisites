@@ -16,7 +16,7 @@ public class commitTester {
 		
 		Commit test2 = new Commit("Jack", "Second");
 		test2.writeFile();
-		/*
+		
 		test.add("tstst - Copy");
 		test.add("tstst - Copy (2)");
 		test.add("tstst - Copy (3)");
@@ -36,7 +36,7 @@ public class commitTester {
 		
 		Commit test5 = new Commit("Jack", "Fifth");
 		test5.writeFile();
-		*/
+		
 	}
 
 } 
