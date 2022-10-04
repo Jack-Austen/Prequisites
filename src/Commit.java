@@ -19,10 +19,11 @@ public class Commit {
 	String date;
 	String name;
 	String summary;
+	String prevTree;
 	Tree tree;
 	public Commit(String author, String description) {//Also need to get rid of parent?, not needed
 		p = getHead();
-		System.out.println (p);
+		//System.out.println (p);
 		c="";
 		summary = description;
 		name = author;
@@ -39,6 +40,7 @@ public class Commit {
 				e.printStackTrace();
 			}
 			list.add("tree : " + s.substring(0,40));//Fix this
+			prevTree = s.substring(0,40);
 		}
 		
 		String sub = "";
@@ -49,10 +51,22 @@ public class Commit {
 			s = Files.readString(p);
 			
 			while (s.indexOf(":") != -1) {
-				blobname = s.substring(0,s.indexOf(":")-1);
-				sub = s.substring(s.indexOf(":")+2, s.indexOf(":")+42);
-				s = s.substring(s.indexOf(":")+44);
-				list.add("blob : " + sub + " " + blobname);
+				if (s.indexOf("*")>s.indexOf(":")||s.indexOf("*")<0) {
+					blobname = s.substring(0,s.indexOf(":")-1);
+					sub = s.substring(s.indexOf(":")+2, s.indexOf(":")+42);
+					s = s.substring(s.indexOf(":")+44);
+					list.add("blob : " + sub + " " + blobname);
+				}
+				else {
+					if(s.charAt(1)=='e') {
+						list = deledit (list, s.substring(s.indexOf(":")+2, s.indexOf(":")+42), prevTree);
+						s = s.substring(s.indexOf(":")+44);
+					}
+					else {
+						list = deledit (list, s.substring(s.indexOf(":")+2, s.indexOf(":")+42), prevTree);
+						s = s.substring(s.indexOf(":")+44);
+					}
+				}
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -78,6 +92,48 @@ public class Commit {
 			e.printStackTrace();
 		}
 	}
+	
+	public ArrayList <String> deledit (ArrayList <String> list, String hash, String tree){
+		boolean flag = false;
+		boolean nextTreeHasUpdated = false;
+		String str = "";
+		String nextTree = "";
+		
+		Path fileName = Path.of("C:\\Users\\jacka\\eclipse-workspace\\Prequisites\\objects\\"+tree);
+		try {
+			str = Files.readString(fileName);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		while (str.indexOf(":") != -1) {
+			if (str.charAt(0)=='b'&&!str.substring(7,47).equals(hash)) {
+				list.add(str.substring(0,str.indexOf("\n")));
+				str = str.substring(str.indexOf("\n")+1);
+			}
+			else if (str.charAt(0)=='t') {
+				nextTree = str.substring(7,47);
+				str = str.substring(str.indexOf("\n")+1);
+				nextTreeHasUpdated = true;
+			}
+			else {
+				flag = true;
+				str = str.substring(str.indexOf("\n")+1);
+			}
+		}
+		if (flag = false) {
+			return deledit(list,hash,nextTree);
+		}
+		else {
+			if (nextTreeHasUpdated == true) {
+				list.add("tree : " + nextTree);
+			}
+			return list;
+		}
+	}
+	
 	public Tree getTree() {
 		return tree;
 	}

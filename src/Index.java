@@ -54,6 +54,18 @@ public class Index {
 		editIndex();
 	}
 	
+	public void delete (String FileName) throws NoSuchAlgorithmException, IOException {
+		Blob blob = new Blob(FileName);
+		files.put("*deleted* " + FileName, blob.getSHA1());
+		editIndex();
+	}
+	
+	public void edit (String FileName) throws NoSuchAlgorithmException, IOException {
+		Blob blob = new Blob(FileName);
+		files.put("*edited* " + FileName, blob.getSHA1());
+		editIndex();
+	}
+	
 	public static void empty () {
 		files = new HashMap <String, String>();
 	}

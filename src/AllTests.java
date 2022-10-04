@@ -1,9 +1,13 @@
 import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+
 import org.junit.jupiter.api.Test;
 import org.junit.platform.suite.api.IncludeClassNamePatterns;
 import org.junit.platform.suite.api.IncludeTags;
 import org.junit.platform.suite.api.SelectPackages;
-import org.junit.platform.suite.api.Suite;
+import org.junit.platform.suite.api.Suite; 
 import org.junit.platform.suite.api.SuiteDisplayName;
 
 // Format for JUnit 5 Jupiter Tests 
@@ -17,7 +21,10 @@ import org.junit.platform.suite.api.SuiteDisplayName;
 class AllTests {
     
     @Test
-    public void test() {
+    public void test() throws NoSuchAlgorithmException, IOException {
         assertTrue(true);
+        CommitsTester.test();
+        BlobsTester.test();
+        IndexsTester.test();
     }
-}
+}  

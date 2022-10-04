@@ -32,11 +32,11 @@ public class commitTester {
 		Commit test4 = new Commit("Jack", "Fourth");
 		test4.writeFile();
 		
+		test.delete("tstst - Copy (2)");
 		test.add("tstst - Copy (8)");
 		
 		Commit test5 = new Commit("Jack", "Fifth");
 		test5.writeFile();
-		
 	}
 
 } 
