@@ -115,32 +115,6 @@ public class Commit {
 			p.writeFile();
 		}
 		
-		/*
-		if (p != null) {
-			String s = generateSHA1 ();
-			Path path = Paths.get(p);
-			String fileStr = "";
-			try {
-				fileStr = Files.readString(path);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			String temp = fileStr.substring (0,fileStr.indexOf("\n")+2);
-			fileStr = fileStr.substring (fileStr.indexOf("\n")+2);
-			temp = temp + fileStr.substring (0,fileStr.indexOf("\n")+2);
-			fileStr = fileStr.substring (fileStr.indexOf("\n")+2);
-			
-			
-			try {
-				Files.writeString(path, temp + s + fileStr, StandardCharsets.ISO_8859_1);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		*/
 		
 		File f = new File("objects", generateSHA1());
 		PrintWriter pw = new PrintWriter(f);
@@ -149,7 +123,7 @@ public class Commit {
 			pw.println(p.generateSHA1());
 		}
 		else {
-			pw.println(p);
+			pw.println("");
 		}
 		pw.println(c);
 		pw.println(name);
