@@ -59,11 +59,13 @@ public class Commit {
 				}
 				else {
 					if(s.charAt(1)=='e') {
-						list = deledit (list, s.substring(s.indexOf(":")+2, s.indexOf(":")+42), prevTree);
+						list = deledit (list, s.substring(s.indexOf(":")+2, s.indexOf(":")+42), prevTree, false);
+						list.remove("tree : " + prevTree);
 						s = s.substring(s.indexOf(":")+44);
 					}
 					else {
-						list = deledit (list, s.substring(s.indexOf(":")+2, s.indexOf(":")+42), prevTree);
+						list = deledit (list, s.substring(s.indexOf(":")+2, s.indexOf(":")+42), prevTree, false);
+						list.remove("tree : " + prevTree);
 						s = s.substring(s.indexOf(":")+44);
 					}
 				}
@@ -93,7 +95,7 @@ public class Commit {
 		}
 	}
 	
-	public ArrayList <String> deledit (ArrayList <String> list, String hash, String tree){
+	public ArrayList <String> deledit (ArrayList <String> list, String hash, String tree, boolean delay){
 		boolean flag = false;
 		boolean nextTreeHasUpdated = false;
 		String str = "";
@@ -123,8 +125,14 @@ public class Commit {
 				str = str.substring(str.indexOf("\n")+1);
 			}
 		}
-		if (flag = false) {
-			return deledit(list,hash,nextTree);
+		if (flag == false && delay == false) {
+			return deledit(list,hash,nextTree,false);
+		}
+		else if (flag == true){
+			if (nextTreeHasUpdated == true) {
+				list.add("tree : " + nextTree);
+			}
+			return list;
 		}
 		else {
 			if (nextTreeHasUpdated == true) {

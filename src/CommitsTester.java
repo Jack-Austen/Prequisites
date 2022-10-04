@@ -21,7 +21,7 @@ class CommitsTester {
 	@Test
 	static void test() throws NoSuchAlgorithmException, IOException {
 		Index test = new Index();
-		test.init();
+		test.init();   
 		test.add("tstst");
 		test.add("tsts");
 		
@@ -29,9 +29,13 @@ class CommitsTester {
 		test1.writeFile();
 		
 		test.add("tst");
+		test.add("tstst - Copy");
+		
 		
 		Commit test2 = new Commit("Jack", "Second");
 		test2.writeFile();
+		
+		/*
 		
 		test.add("tstst - Copy");
 		test.add("tstst - Copy (2)");
@@ -39,8 +43,11 @@ class CommitsTester {
 		test.add("tstst - Copy (4)");
 		test.add("tstst - Copy (5)");
 		
+		
 		Commit test3 = new Commit("Jack", "Third");
 		test3.writeFile();
+		
+		*/
 		
 		test.add("tstst - Copy (6)");
 		test.add("tstst - Copy (7)");
@@ -48,7 +55,7 @@ class CommitsTester {
 		Commit test4 = new Commit("Jack", "Fourth");
 		test4.writeFile();
 		
-		test.delete("tstst - Copy (2)");
+		test.delete("tstst - Copy");
 		test.add("tstst - Copy (8)");
 		
 		Commit test5 = new Commit("Jack", "Fifth");
