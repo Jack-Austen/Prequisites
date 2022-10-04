@@ -9,6 +9,18 @@ public class Tree {
 	private ArrayList<String> list;
 	public Tree(ArrayList<String> KVList) {
 		list = KVList;
+		File f = new File("objects", generateSHA1());
+		try {
+			PrintWriter pw = new PrintWriter(f);
+			for(int i = 0; i < list.size(); i++) {
+				pw.println(list.get(i));
+			}
+			pw.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	public static String encrypt(String input) {
 		try {
@@ -25,14 +37,12 @@ public class Tree {
 		}
 	}
 	public String generateSHA1() {
-		StringBuilder all = new StringBuilder();
-		for(int i = 0; i < list.size() - 1; i++) {
-			all.append(list.get(i));
-			all.append("\n");
+		String all = "";
+		for (int i = 0; i < list.size()-1;i++) {
+			all = all + list.get(i) + "\n";
 		}
-		all.append(list.get(list.size() - 1));
-		System.out.println(all.toString());
-		return encrypt(all.toString());
+		all = all + list.get(list.size()-1);
+		return encrypt (all);
 	}
 	public void createIndexFile() throws FileNotFoundException {
 		File indexFile = new File("objects/" + generateSHA1());

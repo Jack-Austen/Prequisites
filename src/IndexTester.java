@@ -9,8 +9,6 @@ public class IndexTester {
 		test.init();
 		test.add("tst");
 		test.add("tsts");
-		test.add("tstst");
-//		test.remove("tsts");
 		test.remove("tst");
 		test.remove("tstst");
 	}

@@ -20,9 +20,8 @@ public class Commit {
 	String name;
 	String summary;
 	Tree tree;
-	public Commit(String parent, String child, String author, String description) {//Also need to get rid of parent?, not needed
+	public Commit(String parent, String author, String description) {//Also need to get rid of parent?, not needed
 		p = parent;
-		c = child;
 		summary = description;
 		name = author;
 		ArrayList<String> list = new ArrayList <String> ();
@@ -42,14 +41,14 @@ public class Commit {
 		String sub = "";
 		String blobname = "";
 		
-		Path p = Paths.get("index.txt");
+		Path p = Paths.get("index");
 		try {
 			s = Files.readString(p);
 			
 			while (s.indexOf(":") != -1) {
 				blobname = s.substring(0,s.indexOf(":")-1);
-				sub = s.substring(s.indexOf(":")+2, s.indexOf(":")+34);
-				s = s.substring(s.indexOf(":")+35);
+				sub = s.substring(s.indexOf(":")+2, s.indexOf(":")+40);
+				s = s.substring(s.indexOf(":")+44);
 				list.add("blob : " + sub + " " + blobname);
 			}
 		} catch (IOException e) {
@@ -58,6 +57,13 @@ public class Commit {
 		}
 		
 		tree = new Tree (list);
+		
+		try {
+			Files.writeString(p, "", StandardCharsets.ISO_8859_1);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public Tree getTree() {
 		return tree;
@@ -90,7 +96,7 @@ public class Commit {
 		PrintWriter pw = new PrintWriter(f);
 		pw.println(tree.generateSHA1());
 		pw.println(p);
-		pw.println(c);
+		pw.println("");
 		pw.println(name);
 		pw.println(getDate());
 		pw.println(summary);
