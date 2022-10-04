@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class Index {
 	PrintWriter pw;
-	HashMap<String, String> files = new HashMap<String, String>();
+	private static HashMap<String, String> files = new HashMap<String, String>();
 	File index;
 	public Index() throws FileNotFoundException {
 		
@@ -38,4 +38,9 @@ public class Index {
 		removee.delete();
 		editIndex();
 	}
+	
+	public static void empty () {
+		files = new HashMap <String, String>();
+	}
+
 }

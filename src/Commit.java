@@ -58,12 +58,7 @@ public class Commit {
 		
 		tree = new Tree (list);
 		
-		try {
-			Files.writeString(p, "", StandardCharsets.ISO_8859_1);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Index.empty();
 	}
 	public Tree getTree() {
 		return tree;
@@ -92,6 +87,31 @@ public class Commit {
 		return date;
 	}
 	public void writeFile() throws FileNotFoundException {
+		if (p != null) {
+			String s = generateSHA1 ();
+			Path path = Paths.get("p");
+			String fileStr = "";
+			try {
+				fileStr = Files.readString(path);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			String temp = fileStr.substring (0,fileStr.indexOf("\n")+2);
+			fileStr = fileStr.substring (fileStr.indexOf("\n")+2);
+			temp = temp + fileStr.substring (0,fileStr.indexOf("\n")+2);
+			fileStr = fileStr.substring (fileStr.indexOf("\n")+2);
+			
+			
+			try {
+				Files.writeString(path, temp + s + fileStr, StandardCharsets.ISO_8859_1);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		File f = new File("objects", generateSHA1());
 		PrintWriter pw = new PrintWriter(f);
 		pw.println(tree.generateSHA1());
