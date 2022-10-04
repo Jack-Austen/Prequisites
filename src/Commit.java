@@ -35,7 +35,7 @@ public class Commit {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			list.add("tree : " + s.substring(0,32));//Fix this
+			list.add("tree : " + s.substring(0,40));//Fix this
 		}
 		
 		String sub = "";
@@ -47,7 +47,7 @@ public class Commit {
 			
 			while (s.indexOf(":") != -1) {
 				blobname = s.substring(0,s.indexOf(":")-1);
-				sub = s.substring(s.indexOf(":")+2, s.indexOf(":")+40);
+				sub = s.substring(s.indexOf(":")+2, s.indexOf(":")+42);
 				s = s.substring(s.indexOf(":")+44);
 				list.add("blob : " + sub + " " + blobname);
 			}
@@ -59,9 +59,19 @@ public class Commit {
 		tree = new Tree (list);
 		
 		Index.empty();
+		
+		try {
+			Files.writeString(p, "", StandardCharsets.ISO_8859_1);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public Tree getTree() {
 		return tree;
+	}
+	public String getFileName() {
+		return generateSHA1();
 	}
 	public static String encrypt(String input) {
 		try {
@@ -87,9 +97,10 @@ public class Commit {
 		return date;
 	}
 	public void writeFile() throws FileNotFoundException {
+		/*
 		if (p != null) {
 			String s = generateSHA1 ();
-			Path path = Paths.get("p");
+			Path path = Paths.get(p);
 			String fileStr = "";
 			try {
 				fileStr = Files.readString(path);
@@ -111,6 +122,7 @@ public class Commit {
 				e.printStackTrace();
 			}
 		}
+		*/
 		
 		File f = new File("objects", generateSHA1());
 		PrintWriter pw = new PrintWriter(f);
