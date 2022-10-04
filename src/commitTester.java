@@ -14,7 +14,7 @@ public class commitTester {
 		
 		test.add("tst");
 		
-		Commit test2 = new Commit(test1.getFileName(), "Jack", "Second");
+		Commit test2 = new Commit(test1, "Jack", "Second");
 		test2.writeFile();
 	}
 

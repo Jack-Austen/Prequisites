@@ -14,21 +14,23 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Commit {
-	String p; 
+	Commit p; 
 	String c;
 	String date;
 	String name;
 	String summary;
 	Tree tree;
-	public Commit(String parent, String author, String description) {//Also need to get rid of parent?, not needed
+	public Commit(Commit parent, String author, String description) {//Also need to get rid of parent?, not needed
 		p = parent;
+		c="";
 		summary = description;
 		name = author;
+		date = getDate();
 		ArrayList<String> list = new ArrayList <String> ();
 		String s = "";
 		
 		if(p != null) {
-			Path path = Paths.get("./objects/" + p);
+			Path path = Paths.get("./objects/" + p.generateSHA1());
 			try {
 				s = Files.readString(path);
 			} catch (IOException e) {
@@ -70,8 +72,8 @@ public class Commit {
 	public Tree getTree() {
 		return tree;
 	}
-	public String getFileName() {
-		return generateSHA1();
+	public void setChild(String child) {
+		c = child;
 	}
 	public static String encrypt(String input) {
 		try {
@@ -88,7 +90,12 @@ public class Commit {
 		}
 	}
 	public String generateSHA1() {
-		return encrypt(summary + getDate() + name + p);
+		if (p != null) {
+			return encrypt(summary + date + name + p.generateSHA1());
+		}
+		else {
+			return encrypt(summary + date + name);
+		}
 	}
 	public String getDate() {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
@@ -97,6 +104,17 @@ public class Commit {
 		return date;
 	}
 	public void writeFile() throws FileNotFoundException {
+		if (p != null) {
+			//Path path = Paths.get(p.generateSHA1());
+			
+			File remove = new File("objects", p.generateSHA1());
+			remove.delete();
+			
+			p.setChild(generateSHA1());
+			
+			p.writeFile();
+		}
+		
 		/*
 		if (p != null) {
 			String s = generateSHA1 ();
@@ -127,10 +145,15 @@ public class Commit {
 		File f = new File("objects", generateSHA1());
 		PrintWriter pw = new PrintWriter(f);
 		pw.println(tree.generateSHA1());
-		pw.println(p);
-		pw.println("");
+		if (p != null) {
+			pw.println(p.generateSHA1());
+		}
+		else {
+			pw.println(p);
+		}
+		pw.println(c);
 		pw.println(name);
-		pw.println(getDate());
+		pw.println(date);
 		pw.println(summary);
 		pw.close();
 	}
