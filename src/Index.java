@@ -29,7 +29,6 @@ public class Index {
 	        e.printStackTrace();
 	    }	
 	    
-		
 		File theDir = new File("objects");
 		if (!theDir.exists()){
 		    theDir.mkdirs();

@@ -23,7 +23,7 @@ class AllTests {
     @Test
     public void test() throws NoSuchAlgorithmException, IOException {
         //assertTrue(true);
-        CommitsTester.test(); 
+        CommitssTester.test(); 
         BlobsTester.test();
         IndexsTester.test(); 
     }

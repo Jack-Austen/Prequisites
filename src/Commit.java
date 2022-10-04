@@ -58,13 +58,13 @@ public class Commit {
 					s = s.substring(s.indexOf(":")+44);
 					list.add("blob : " + sub + " " + blobname);
 				}
-				else {//if it is a delete or an edit, it calls the recursive method deledit and then keeps going
+				else {//if it is a delete or an edit, it calls the recursive method deledit and then keeps going *edited* 
 					if(s.charAt(1)=='e') {
 						list = deledit (list, s.substring(s.indexOf(":")+2, s.indexOf(":")+42), prevTree, false);
 						blobname = s.substring(8,s.indexOf(":")-1);
 						list.remove("tree : " + prevTree);
-						s = s.substring(s.indexOf(":")+44);
 						list.add("blob : " + s.substring(s.indexOf(":")+2, s.indexOf(":")+42) + blobname);
+						s = s.substring(s.indexOf(":")+44);
 					}
 					else {
 						list = deledit (list, s.substring(s.indexOf(":")+2, s.indexOf(":")+42), prevTree, false);
@@ -96,6 +96,8 @@ public class Commit {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
 	}
 	
 	public ArrayList <String> deledit (ArrayList <String> list, String hash, String tree, boolean delay){//this method it scuffed, but it works
@@ -112,11 +114,14 @@ public class Commit {
 			e.printStackTrace();
 		}
 		
-		
+	
 		while (str.indexOf(":") != -1) {//goes line by line and decides outcome based on characteristics
 			if (str.charAt(0)=='b'&&!str.substring(7,47).equals(hash)) {
-				list.add(str.substring(0,str.indexOf("\n")));
+				list.add(str.substring(0,str.indexOf("\n")-1));
+				//System.out.println (str.substring(0,str.indexOf("\n")));
 				str = str.substring(str.indexOf("\n")+1);
+				//System.out.println ("YOINK");
+				//System.out.println (str);
 			}
 			else if (str.charAt(0)=='t') {
 				nextTree = str.substring(7,47);
