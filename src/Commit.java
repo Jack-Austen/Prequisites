@@ -19,28 +19,29 @@ public class Commit {
 	String date;
 	String name;
 	String summary;
-	String prevTree;
+	String prevTree; //used for delete and edit
 	Tree tree;
-	public Commit(String author, String description) {//Also need to get rid of parent?, not needed
+	public Commit(String author, String description) {//makes a commit
 		p = getHead();
-		//System.out.println (p);
 		c="";
 		summary = description;
 		name = author;
 		date = getDate();
 		ArrayList<String> list = new ArrayList <String> ();
 		String s = "";
+		//Above is just variable stuff
+		
 		Path fileName;
 		if(!(p.equals(""))) {
-			fileName = Path.of("C:\\Users\\jacka\\eclipse-workspace\\Prequisites\\objects\\"+p);
+			fileName = Path.of("C:\\Users\\jacka\\eclipse-workspace\\Prequisites\\objects\\"+p);//gets the file to read
 			try {
 				s = Files.readString(fileName);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			list.add("tree : " + s.substring(0,40));//Fix this
-			prevTree = s.substring(0,40);
+			list.add("tree : " + s.substring(0,40));
+			prevTree = s.substring(0,40);//stores the tree hash so we can get it for deletion
 		}
 		
 		String sub = "";
@@ -50,14 +51,14 @@ public class Commit {
 		try {
 			s = Files.readString(p);
 			
-			while (s.indexOf(":") != -1) {
+			while (s.indexOf(":") != -1) {//goes line by line through the list and sorts
 				if (s.indexOf("*")>s.indexOf(":")||s.indexOf("*")<0) {
 					blobname = s.substring(0,s.indexOf(":")-1);
 					sub = s.substring(s.indexOf(":")+2, s.indexOf(":")+42);
 					s = s.substring(s.indexOf(":")+44);
 					list.add("blob : " + sub + " " + blobname);
 				}
-				else {
+				else {//if it is a delete or an edit, it calls the recursive method deledit and then keeps going
 					if(s.charAt(1)=='e') {
 						list = deledit (list, s.substring(s.indexOf(":")+2, s.indexOf(":")+42), prevTree, false);
 						list.remove("tree : " + prevTree);
@@ -77,16 +78,16 @@ public class Commit {
 		
 		tree = new Tree (list);
 		
-		Index.empty();
+		Index.empty();//empties the index
 		
 		try {
-			Files.writeString(p, "", StandardCharsets.ISO_8859_1);
+			Files.writeString(p, "", StandardCharsets.ISO_8859_1);//empties the index
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		Path pathH = Paths.get("HEAD");
+		Path pathH = Paths.get("HEAD");//sets the head
 		try {
 			Files.writeString(pathH, generateSHA1(), StandardCharsets.ISO_8859_1);
 		} catch (IOException e) {
@@ -95,13 +96,13 @@ public class Commit {
 		}
 	}
 	
-	public ArrayList <String> deledit (ArrayList <String> list, String hash, String tree, boolean delay){
+	public ArrayList <String> deledit (ArrayList <String> list, String hash, String tree, boolean delay){//this method it scuffed, but it works
 		boolean flag = false;
 		boolean nextTreeHasUpdated = false;
 		String str = "";
 		String nextTree = "";
 		
-		Path fileName = Path.of("C:\\Users\\jacka\\eclipse-workspace\\Prequisites\\objects\\"+tree);
+		Path fileName = Path.of("C:\\Users\\jacka\\eclipse-workspace\\Prequisites\\objects\\"+tree);//gets the file
 		try {
 			str = Files.readString(fileName);
 		} catch (IOException e) {
@@ -110,7 +111,7 @@ public class Commit {
 		}
 		
 		
-		while (str.indexOf(":") != -1) {
+		while (str.indexOf(":") != -1) {//goes line by line and decides outcome based on characteristics
 			if (str.charAt(0)=='b'&&!str.substring(7,47).equals(hash)) {
 				list.add(str.substring(0,str.indexOf("\n")));
 				str = str.substring(str.indexOf("\n")+1);
@@ -125,10 +126,10 @@ public class Commit {
 				str = str.substring(str.indexOf("\n")+1);
 			}
 		}
-		if (flag == false && delay == false) {
+		if (flag == false && delay == false) {//this is the recursive case
 			return deledit(list,hash,nextTree,false);
 		}
-		else {
+		else {//this is the base case, when we find the hash we are looking for and connect to the tree behind it
 			if (nextTreeHasUpdated == true) {
 				list.add("tree : " + nextTree);
 			}
@@ -139,7 +140,7 @@ public class Commit {
 	public Tree getTree() {
 		return tree;
 	}
-	public String getHead() {
+	public String getHead() {//gets the head hash
 		Path pathH = Paths.get("HEAD");
 		String str = "";
 		try {
@@ -182,7 +183,7 @@ public class Commit {
 		return date;
 	}
 	public void writeFile() throws FileNotFoundException {
-		if (!(p.equals(""))) {
+		if (!(p.equals(""))) {//writes the child name in to the parent
 			String str = "";
 			Path fileName;
 			fileName = Path.of("C:\\Users\\jacka\\eclipse-workspace\\Prequisites\\objects\\"+p);
@@ -209,7 +210,7 @@ public class Commit {
 			
 		}
 		
-		
+		//below is what actually makes the commit
 		
 		File f = new File("objects", generateSHA1());
 		PrintWriter pw = new PrintWriter(f);

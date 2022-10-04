@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 public class Tree {
 	private ArrayList<String> list;
-	public Tree(ArrayList<String> KVList) {
+	public Tree(ArrayList<String> KVList) {//writes out the tree given an array list of strings
 		list = KVList;
 		File f = new File("objects", generateSHA1());
 		try {
@@ -22,7 +22,7 @@ public class Tree {
 		}
 		
 	}
-	public static String encrypt(String input) {
+	public static String encrypt(String input) {//gets the sha1
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-1");
 			byte[] messageDigest = md.digest(input.getBytes());
@@ -36,7 +36,7 @@ public class Tree {
 			throw new RuntimeException(e);
 		}
 	}
-	public String generateSHA1() {
+	public String generateSHA1() {//gets the sha1
 		String all = "";
 		for (int i = 0; i < list.size()-1;i++) {
 			all = all + list.get(i) + "\n";
@@ -44,7 +44,7 @@ public class Tree {
 		all = all + list.get(list.size()-1);
 		return encrypt (all);
 	}
-	public void createIndexFile() throws FileNotFoundException {
+	public void createIndexFile() throws FileNotFoundException {//not useful? just creates index
 		File indexFile = new File("objects/" + generateSHA1());
 		PrintWriter pw = new PrintWriter(indexFile);
 		for(String s : list) {
