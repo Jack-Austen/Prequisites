@@ -61,8 +61,10 @@ public class Commit {
 				else {//if it is a delete or an edit, it calls the recursive method deledit and then keeps going
 					if(s.charAt(1)=='e') {
 						list = deledit (list, s.substring(s.indexOf(":")+2, s.indexOf(":")+42), prevTree, false);
+						blobname = s.substring(8,s.indexOf(":")-1);
 						list.remove("tree : " + prevTree);
 						s = s.substring(s.indexOf(":")+44);
+						list.add("blob : " + s.substring(s.indexOf(":")+2, s.indexOf(":")+42) + blobname);
 					}
 					else {
 						list = deledit (list, s.substring(s.indexOf(":")+2, s.indexOf(":")+42), prevTree, false);

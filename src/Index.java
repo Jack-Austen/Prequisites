@@ -17,7 +17,7 @@ public class Index {
 	public Index() throws FileNotFoundException {
 		
 	}
-	public void init() {
+	public void init() {//makes the head and index files and objects folder
 		File theindex = new File("index");
 		index = theindex;
 		
@@ -35,38 +35,38 @@ public class Index {
 		    theDir.mkdirs();
 		}
 	}
-	public void editIndex() throws FileNotFoundException {
+	public void editIndex() throws FileNotFoundException {//sets the index to what it should be
 		pw = new PrintWriter(index);
 		for(String s : files.keySet()) {
 			pw.println(s + " : " + files.get(s));
 		}
 		pw.close();
 	}
-	public void add(String FileName) throws IOException, NoSuchAlgorithmException {
+	public void add(String FileName) throws IOException, NoSuchAlgorithmException {//adds a blob
 		Blob blob = new Blob(FileName);
 		files.put(FileName, blob.getSHA1());
 		editIndex();
 	}
-	public void remove(String FileName) throws FileNotFoundException {
+	public void remove(String FileName) throws FileNotFoundException {//removes a blob
 		File removee = new File("objects", files.get(FileName));
 		files.remove(FileName);
 		removee.delete();
 		editIndex();
 	}
 	
-	public void delete (String FileName) throws NoSuchAlgorithmException, IOException {
+	public void delete (String FileName) throws NoSuchAlgorithmException, IOException {//deletes an old blob
 		Blob blob = new Blob(FileName);
 		files.put("*deleted* " + FileName, blob.getSHA1());
 		editIndex();
 	}
 	
-	public void edit (String FileName) throws NoSuchAlgorithmException, IOException {
+	public void edit (String FileName) throws NoSuchAlgorithmException, IOException {//edits (which is basically deleting) an old blob
 		Blob blob = new Blob(FileName);
 		files.put("*edited* " + FileName, blob.getSHA1());
 		editIndex();
 	}
 	
-	public static void empty () {
+	public static void empty () {//makes it empty
 		files = new HashMap <String, String>();
 	}
 
