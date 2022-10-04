@@ -9,13 +9,6 @@ import org.junit.jupiter.api.Test;
 
 class BlobsTester {
 
-	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterAll
-	static void tearDownAfterClass() throws Exception {
-	}
 
 	@Test
 	static void test() throws NoSuchAlgorithmException, IOException {

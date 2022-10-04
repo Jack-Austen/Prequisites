@@ -128,12 +128,6 @@ public class Commit {
 		if (flag == false && delay == false) {
 			return deledit(list,hash,nextTree,false);
 		}
-		else if (flag == true){
-			if (nextTreeHasUpdated == true) {
-				list.add("tree : " + nextTree);
-			}
-			return list;
-		}
 		else {
 			if (nextTreeHasUpdated == true) {
 				list.add("tree : " + nextTree);

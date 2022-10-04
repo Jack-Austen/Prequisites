@@ -10,14 +10,6 @@ import java.security.NoSuchAlgorithmException;
 
 class CommitsTester {
 
-	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterAll
-	static void tearDownAfterClass() throws Exception {
-	}
-
 	@Test
 	static void test() throws NoSuchAlgorithmException, IOException {
 		Index test = new Index();
@@ -35,9 +27,8 @@ class CommitsTester {
 		Commit test2 = new Commit("Jack", "Second");
 		test2.writeFile();
 		
-		/*
 		
-		test.add("tstst - Copy");
+		
 		test.add("tstst - Copy (2)");
 		test.add("tstst - Copy (3)");
 		test.add("tstst - Copy (4)");
@@ -47,7 +38,7 @@ class CommitsTester {
 		Commit test3 = new Commit("Jack", "Third");
 		test3.writeFile();
 		
-		*/
+		
 		
 		test.add("tstst - Copy (6)");
 		test.add("tstst - Copy (7)");
@@ -55,7 +46,7 @@ class CommitsTester {
 		Commit test4 = new Commit("Jack", "Fourth");
 		test4.writeFile();
 		
-		test.delete("tstst - Copy");
+		test.edit("tsts");
 		test.add("tstst - Copy (8)");
 		
 		Commit test5 = new Commit("Jack", "Fifth");

@@ -10,14 +10,6 @@ import org.junit.jupiter.api.Test;
 
 class IndexsTester {
 
-	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterAll
-	static void tearDownAfterClass() throws Exception {
-	}
-
 	@Test
 	static void test() throws NoSuchAlgorithmException, IOException {
 		Index test = new Index();
