@@ -11,6 +11,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class Commit {
 	String p; 
@@ -24,21 +25,39 @@ public class Commit {
 		c = child;
 		summary = description;
 		name = author;
+		ArrayList<String> list = new ArrayList <String> ();
+		String s = "";
+		
 		if(p != null) {
-			String s = "";
 			Path path = Paths.get("./objects/" + p);
 			try {
 				s = Files.readString(path);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}//gets the text of the original file 
-			s.substring(0);//FIX THIS
-			tree = new Tree (s);//use p to get the last tree to start the new tree
+			}
+			list.add("tree : " + s.substring(0,32));//Fix this
 		}
-		else{
-			tree = new Tree (null);
+		
+		String sub = "";
+		String blobname = "";
+		
+		Path p = Paths.get("index.txt");
+		try {
+			s = Files.readString(p);
+			
+			while (s.indexOf(":") != -1) {
+				blobname = s.substring(0,s.indexOf(":")-1);
+				sub = s.substring(s.indexOf(":")+2, s.indexOf(":")+34);
+				s = s.substring(s.indexOf(":")+35);
+				list.add("blob : " + sub + " " + blobname);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		tree = new Tree (list);
 	}
 	public Tree getTree() {
 		return tree;

@@ -6,10 +6,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 public class Tree {
-	private String prev;
-	public Tree(String previous) {
-		prev = previous;
-		
+	private ArrayList<String> list;
+	public Tree(ArrayList<String> KVList) {
+		list = KVList;
 	}
 	public static String encrypt(String input) {
 		try {
