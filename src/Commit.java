@@ -14,25 +14,26 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Commit {
-	Commit p; 
+	String p; 
 	String c;
 	String date;
 	String name;
 	String summary;
 	Tree tree;
-	public Commit(Commit parent, String author, String description) {//Also need to get rid of parent?, not needed
-		p = parent;
+	public Commit(String author, String description) {//Also need to get rid of parent?, not needed
+		p = getHead();
+		System.out.println (p);
 		c="";
 		summary = description;
 		name = author;
 		date = getDate();
 		ArrayList<String> list = new ArrayList <String> ();
 		String s = "";
-		
-		if(p != null) {
-			Path path = Paths.get("./objects/" + p.generateSHA1());
+		Path fileName;
+		if(!(p.equals(""))) {
+			fileName = Path.of("C:\\Users\\jacka\\eclipse-workspace\\Prequisites\\objects\\"+p);
 			try {
-				s = Files.readString(path);
+				s = Files.readString(fileName);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -68,9 +69,28 @@ public class Commit {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		Path pathH = Paths.get("HEAD");
+		try {
+			Files.writeString(pathH, generateSHA1(), StandardCharsets.ISO_8859_1);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public Tree getTree() {
 		return tree;
+	}
+	public String getHead() {
+		Path pathH = Paths.get("HEAD");
+		String str = "";
+		try {
+			str = Files.readString(pathH);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return str;
 	}
 	public void setChild(String child) {
 		c = child;
@@ -91,7 +111,7 @@ public class Commit {
 	}
 	public String generateSHA1() {
 		if (p != null) {
-			return encrypt(summary + date + name + p.generateSHA1());
+			return encrypt(summary + date + name + p);
 		}
 		else {
 			return encrypt(summary + date + name);
@@ -104,53 +124,39 @@ public class Commit {
 		return date;
 	}
 	public void writeFile() throws FileNotFoundException {
-		if (p != null) {
-			//Path path = Paths.get(p.generateSHA1());
+		if (!(p.equals(""))) {
+			String str = "";
+			Path fileName;
+			fileName = Path.of("C:\\Users\\jacka\\eclipse-workspace\\Prequisites\\objects\\"+p);
+			try {
+				str = Files.readString(fileName);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			String result = "";
+			result = result + str.substring(0,str.indexOf("\n")+1);
+			str = str.substring(str.indexOf("\n")+1);
+			result = result + str.substring(0,str.indexOf("\n")+1);
+			str = str.substring(str.indexOf("\n")+1);
+			result = result + generateSHA1 () + str;
 			
-			File remove = new File("objects", p.generateSHA1());
-			remove.delete();
 			
-			p.setChild(generateSHA1());
+			try {
+				Files.writeString(fileName, result, StandardCharsets.ISO_8859_1);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
-			p.writeFile();
 		}
 		
-		/*
-		if (p != null) {
-			String s = generateSHA1 ();
-			Path path = Paths.get(p);
-			String fileStr = "";
-			try {
-				fileStr = Files.readString(path);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			String temp = fileStr.substring (0,fileStr.indexOf("\n")+2);
-			fileStr = fileStr.substring (fileStr.indexOf("\n")+2);
-			temp = temp + fileStr.substring (0,fileStr.indexOf("\n")+2);
-			fileStr = fileStr.substring (fileStr.indexOf("\n")+2);
-			
-			
-			try {
-				Files.writeString(path, temp + s + fileStr, StandardCharsets.ISO_8859_1);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		*/
+		
 		
 		File f = new File("objects", generateSHA1());
 		PrintWriter pw = new PrintWriter(f);
 		pw.println(tree.generateSHA1());
-		if (p != null) {
-			pw.println(p.generateSHA1());
-		}
-		else {
-			pw.println(p);
-		}
+		pw.println(p);
 		pw.println(c);
 		pw.println(name);
 		pw.println(date);

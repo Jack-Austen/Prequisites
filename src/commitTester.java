@@ -9,33 +9,34 @@ public class commitTester {
 		test.add("tstst");
 		test.add("tsts");
 		
-		Commit test1 = new Commit(null, "Jack", "First");
+		Commit test1 = new Commit("Jack", "First");
 		test1.writeFile();
 		
 		test.add("tst");
 		
-		Commit test2 = new Commit(test1, "Jack", "Second");
+		Commit test2 = new Commit("Jack", "Second");
 		test2.writeFile();
-		
+		/*
 		test.add("tstst - Copy");
 		test.add("tstst - Copy (2)");
 		test.add("tstst - Copy (3)");
 		test.add("tstst - Copy (4)");
 		test.add("tstst - Copy (5)");
 		
-		Commit test3 = new Commit(test2, "Jack", "Third");
+		Commit test3 = new Commit("Jack", "Third");
 		test3.writeFile();
 		
 		test.add("tstst - Copy (6)");
 		test.add("tstst - Copy (7)");
 		
-		Commit test4 = new Commit(test3, "Jack", "Fourth");
+		Commit test4 = new Commit("Jack", "Fourth");
 		test4.writeFile();
 		
 		test.add("tstst - Copy (8)");
 		
-		Commit test5 = new Commit(test4, "Jack", "Fifth");
+		Commit test5 = new Commit("Jack", "Fifth");
 		test5.writeFile();
+		*/
 	}
 
 } 
